@@ -44,9 +44,9 @@ export const rollD20 = ({
       d.options.fumble = flags.fumble;
     }
     d.results.forEach((r) => {
-      if (r.active && d.options.critical === r.result) {
+      if (r.active && d.options.critical <= r.result) {
         roll.isCritical = true;
-      } else if (r.active && d.options.fumble === r.result) {
+      } else if (r.active && d.options.fumble >= r.result) {
         roll.isFumble = true;
       }
     });
@@ -58,7 +58,12 @@ export const rollD20 = ({
 export function calculateCrit({
   parts, rollData, roll, criticalMultiplier, criticalBonusDice,
 }) {
-  const critType = game.settings.get(moduleName, SETTING_CRIT_CALCULATION);
+  var critType;
+  if (rollData.attributes.death && (rollData.item.weaponType == "simpleM" || rollData.item.weaponType == "simpleR" || rollData.item.weaponType == "martialM" || rollData.item.weaponType == "martialR")) {
+    critType = game.settings.get(moduleName, SETTING_CRIT_CALCULATION);
+  } else {
+    critType = CRIT_CALCULATION_DEFAULT;
+  }
   switch (critType) {
     case CRIT_CALCULATION_DEFAULT:
       roll.alter(criticalMultiplier, 0); // Multiply all dice
@@ -71,8 +76,15 @@ export function calculateCrit({
       parts.push('@crit');
       rollData.crit = 0;
       const dRegex = /[0-9]*d[0-9]+/;
+      const rRegex = /[0-9]*d[0-9]+r/;
       parts.forEach((part) => {
         part.split('+').map((p) => p.trim()).forEach((p) => {
+          if (rRegex.test(p)) {
+            var reroll = p.split('r');
+            if (reroll.length > 1) {
+              p = reroll[0];
+            }
+          }
           if (dRegex.test(p)) {
             rollData.crit += p.split('d').reduce((acc, curr) => acc * curr, 1);
           }
