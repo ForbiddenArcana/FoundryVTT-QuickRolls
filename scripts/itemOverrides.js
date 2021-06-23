@@ -333,7 +333,8 @@ async function rollDamage({
   event, spellLevel = null, versatile = false, message, isReroll = false, action,
 } = {}) {
   if (!this.hasDamage) throw new Error('You may not make a Damage Roll with this Item.');
-  const itemData = this.data.data;
+
+  const itemData = this.actor.getOwnedItem(this._data._id).data.data;
   const actorData = this.actor.data.data;
   const rollFlags = {};
 
