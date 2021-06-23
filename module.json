@@ -1,13 +1,13 @@
 {
-  "name": "quick-rolls",
-  "title": "Quick Rolls",
-  "description": "A module for quicker rolling in FoundryVTT.",
-  "author": "Steven Cao",
-  "version": "1.5.4",
+  "name": "quick-rolls-forbidden-arcana",
+  "title": "Quick Rolls - ForbiddenArcana",
+  "description": "A module for quicker rolling in FoundryVTT, with some added houserules.",
+  "author": "ForbiddenArcana",
+  "version": "1.6.0",
   "system": ["dnd5e"],
   "minimumCoreVersion": "0.7.5",
   "compatibleCoreVersion": "0.7.9",
-  "url": "https://github.com/slcao2/FoundryVTT-QuickRolls",
+  "url": "https://github.com/ForbiddenArcana/FoundryVTT-QuickRolls",
   "license": "./LICENSE",
   "readme": "./README.md",
   "esmodules" : [
@@ -35,7 +35,7 @@
     "name": "English",
     "path": "lang/en.json"
   }],
-  "manifest": "https://raw.githubusercontent.com/slcao2/FoundryVTT-QuickRolls/main/module.json",
-  "download": "https://github.com/slcao2/FoundryVTT-QuickRolls/releases/download/v1.5.4/module.zip",
-  "bugs": "https://github.com/slcao2/FoundryVTT-QuickRolls/issues"
+  "manifest": "https://raw.githubusercontent.com/ForbiddenArcana/FoundryVTT-QuickRolls/main/module.json",
+  "download": "https://github.com/ForbiddenArcana/FoundryVTT-QuickRolls/releases/download/v1.5.4/module.zip",
+  "bugs": "https://github.com/ForbiddenArcana/FoundryVTT-QuickRolls/issues"
 }
