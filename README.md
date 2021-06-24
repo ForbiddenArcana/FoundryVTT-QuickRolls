@@ -3,23 +3,20 @@ A module for quicker rolling in FoundryVTT, forked from slcao2's with a handful 
 
 ## Installation
 You can install this module in a couple different ways outlined below.
-
+<!--
 ### Install through FoundryVTT Add-on Modules Tab (Recommended)
 * Go to the Add-on Modules tab.
 * Click Install Module.
 * Search for QuickRolls and click install.
-
+-->
 ### Direct URL Install
 * Go to the Add-on Modules tab.
 * Click Install Module.
 * Copy https://raw.githubusercontent.com/ForbiddenArcana/FoundryVTT-QuickRolls/main/module.json into the Manifest URL and click install.
 
 ### Manual
-* Clone and extract the repo into the `Data/modules/quick-rolls` folder.
+* Clone and extract the repo into the `Data/modules/quick-rolls-forbidden-arcana` folder.
 * You can either clone the repo or download a zip archive from the tags.
-
-## Features
-[List of Features](https://github.com/ForbiddenArcana/FoundryVTT-QuickRolls/wiki/Features)
 
 ## Compatabilities
 Anything that overrides the overriden functions in overrideItem, overrideActor, or overrideActorSetup will likely be incompatible.
