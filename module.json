@@ -3,10 +3,10 @@
   "title": "Quick Rolls - ForbiddenArcana",
   "description": "A module for quicker rolling in FoundryVTT, with some added houserules.",
   "author": "ForbiddenArcana",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "system": ["dnd5e"],
-  "minimumCoreVersion": "0.7.5",
-  "compatibleCoreVersion": "0.7.9",
+  "minimumCoreVersion": "0.8.0",
+  "compatibleCoreVersion": "0.8.9",
   "url": "https://github.com/ForbiddenArcana/FoundryVTT-QuickRolls",
   "license": "./LICENSE",
   "readme": "./README.md",
@@ -36,6 +36,6 @@
     "path": "lang/en.json"
   }],
   "manifest": "https://raw.githubusercontent.com/ForbiddenArcana/FoundryVTT-QuickRolls/main/module.json",
-  "download": "https://github.com/ForbiddenArcana/FoundryVTT-QuickRolls/releases/download/v1.6.0/module.zip",
+  "download": "https://github.com/ForbiddenArcana/FoundryVTT-QuickRolls/releases/download/v1.7.0/module.zip",
   "bugs": "https://github.com/ForbiddenArcana/FoundryVTT-QuickRolls/issues"
 }

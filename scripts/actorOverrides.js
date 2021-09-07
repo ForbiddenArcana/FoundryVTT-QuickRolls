@@ -19,7 +19,7 @@ import { getSkillCustomizationForSkill, isSkillCustomizationEnabled } from './mo
 function _onItemRoll(event) {
   event.preventDefault();
   const { itemId } = event.currentTarget.closest('.item').dataset;
-  const item = this.actor.getOwnedItem(itemId);
+  const item = this.actor.items.get(itemId);
   return item.roll({ event });
 }
 

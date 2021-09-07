@@ -334,7 +334,7 @@ async function rollDamage({
 } = {}) {
   if (!this.hasDamage) throw new Error('You may not make a Damage Roll with this Item.');
 
-  const itemData = this.actor.getOwnedItem(this._data._id).data.data;
+  const itemData = this.actor.items.get(this._data._id).data.data;
   const actorData = this.actor.data.data;
   const rollFlags = {};
 
@@ -477,12 +477,12 @@ async function _onChatCardAction(event) {
   if (!(isTargetted || game.user.isGM || message.isAuthor)) return;
 
   // Recover the actor for the chat card
-  const actor = this._getChatCardActor(card);
+  const actor = await this._getChatCardActor(card);
   if (!actor) return;
 
   // Get the Item from stored flag data or by the item ID on the Actor
   const storedData = message.getFlag('dnd5e', 'itemData');
-  const item = storedData ? this.createOwned(storedData, actor) : actor.getOwnedItem(card.dataset.itemId);
+  const item = storedData ? this.createOwned(storedData, actor) : actor.items.get(card.dataset.itemId);
   if (!item) {
     return ui.notifications.error(
       game.i18n.format('DND5E.ActionWarningNoItem', { item: card.dataset.itemId, name: actor.name }),
