@@ -33,7 +33,8 @@ function _getChatCardActor(card) {
   // Case 1 - a synthetic actor from a Token
   const tokenKey = card.dataset.tokenId;
   if (tokenKey) {
-    const [sceneId, tokenId] = tokenKey.split('.');
+    // docTypeScene and docTypeToken unused by this module, but are needed to capture the right tokenKey parts into sceneId and tokenId due to Foundry 8 API changes
+    const [docTypeScene, sceneId, docTypeToken, tokenId] = tokenKey.split('.');
     const scene = game.scenes.get(sceneId);
     if (!scene) return null;
     const tokenData = scene.getEmbeddedEntity('Token', tokenId);
