@@ -144,7 +144,7 @@ async function displayCard({
   const { token } = this.actor;
   const templateData = {
     actor: this.actor,
-    tokenId: token ? `${token.scene._id}.${token.id}` : null,
+    tokenId: token ? `Scene.${token.scene ? token.scene.id : token.parent.id}.Token.${token.id}` : null,
     item: this.data,
     data: this.getChatData(),
     labels: this.labels,

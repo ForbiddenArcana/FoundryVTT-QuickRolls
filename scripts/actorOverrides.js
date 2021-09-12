@@ -109,7 +109,7 @@ async function _onChatCardAction(event) {
   const { action } = button.dataset;
 
   // Recover the actor for the chat card
-  const actor = this._getChatCardActor(card);
+  const actor = await this._getChatCardActor(card);
   if (!actor) return;
 
   const options = {};
@@ -177,7 +177,7 @@ async function displayCard({
   const hasDataToken = !!(data && data.token);
   const templateData = {
     actor: this,
-    tokenId: token ? `${token.scene._id}.${token.id}` : null,
+    tokenId: token ? `Scene.${token.scene ? token.scene.id : token.parent.id}.Token.${token.id}` : null,
     img: hasDataToken ? data.token.img : this.img,
     name: hasDataToken ? data.token.name : this.name,
     titleText: getTitle(id, type),
@@ -429,7 +429,7 @@ async function rollHitDie(denomination, { dialog = true } = {}) {
   const hasDataToken = !!(data && data.token);
   const templateData = {
     actor: this,
-    tokenId: token ? `${token.scene._id}.${token.id}` : null,
+    tokenId: token ? `Scene.${token.scene ? token.scene.id : token.parent.id}.Token.${token.id}` : null,
     img: hasDataToken ? data.token.img : this.img,
     name: hasDataToken ? data.token.name : this.name,
     titleText: 'Roll Hit Dice',
