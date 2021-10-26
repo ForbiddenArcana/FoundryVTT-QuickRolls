@@ -88,6 +88,8 @@ async function rollAttack({
   } else if ((this.data.type === 'spell') && actorFlags.spellCriticalThreshold) {
     rollFlags.critical = parseInt(actorFlags.spellCriticalThreshold, DEFAULT_RADIX);
   }
+  // Set as lowest of actor threshold and item threshold
+  rollFlags.critical = Math.min(rollFlags.critical ?? 20, itemData.critical?.threshold ?? 20);
 
   // Check Elven Accuracy
   if (['weapon', 'spell'].includes(this.data.type)) {
@@ -249,10 +251,11 @@ async function roll({
   event, configureDialog = true, rollMode, createMessage = true,
 } = {}) {
   let item = this;
-  const { actor } = this;
+  const id = this.data.data; // Item system data
+  const actor = this.actor;
+  const ad = actor.data.data; // Actor system data
 
   // Reference aspects of the item data necessary for usage
-  const id = this.data.data; // Item data
   const hasArea = this.hasAreaTarget; // Is the ability usage an AoE?
   const resource = id.consume || {}; // Resource consumption
   const recharge = id.recharge || {}; // Recharge mechanic
@@ -264,9 +267,11 @@ async function roll({
   let createMeasuredTemplate = hasArea; // Trigger a template creation
   let consumeRecharge = !!recharge.value; // Consume recharge
   let consumeResource = !!resource.target && (resource.type !== 'ammo'); // Consume a linked (non-ammo) resource
-  let consumeSpellSlot = requireSpellSlot; // Consume a spell slot
   let consumeUsage = !!uses.per; // Consume limited uses
   const consumeQuantity = uses.autoDestroy; // Consume quantity of the item in lieu of uses
+  let consumeSpellSlot = requireSpellSlot; // Consume a spell slot
+  let consumeSpellLevel = null; // Consume a specific category of spell slot
+  if ( requireSpellSlot ) consumeSpellLevel = id.preparation.mode === "pact" ? "pact" : `spell${id.level}`;
 
   // Display a configuration dialog to customize the usage
   const needsConfiguration = createMeasuredTemplate || consumeRecharge
@@ -283,20 +288,21 @@ async function roll({
     consumeSpellSlot = Boolean(configuration.consumeSlot);
 
     // Handle spell upcasting
-    if (requireSpellSlot) {
-      const slotLevel = configuration.level;
-      const spellLevel = slotLevel === 'pact' ? actor.data.data.spells.pact.level : parseInt(slotLevel, DEFAULT_RADIX);
-      if (spellLevel !== id.level) {
-        const upcastData = mergeObject(this.data, { 'data.level': spellLevel }, { inplace: false });
-        item = this.constructor.createOwned(upcastData, actor); // Replace the item with an upcast version
+    if ( requireSpellSlot ) {
+      consumeSpellLevel = configuration.level === "pact" ? "pact" : `spell${configuration.level}`;
+      if ( consumeSpellSlot === false ) consumeSpellLevel = null;
+      const upcastLevel = configuration.level === "pact" ? ad.spells.pact.level : parseInt(configuration.level);
+      if (upcastLevel !== id.level) {
+        item = this.clone({"data.level": upcastLevel}, {keepId: true});
+        item.data.update({_id: this.id}); // Retain the original ID (needed until 0.8.2+)
+        item.prepareFinalAttributes(); // Spell save DC, etc...
       }
-      if (consumeSpellSlot) consumeSpellSlot = slotLevel === 'pact' ? 'pact' : `spell${spellLevel}`;
     }
   }
 
   // Determine whether the item can be used by testing for resource consumption
   const usage = item._getUsageUpdates({
-    consumeRecharge, consumeResource, consumeSpellSlot, consumeUsage, consumeQuantity,
+    consumeRecharge, consumeResource, consumeSpellLevel, consumeUsage, consumeQuantity,
   });
   if (!usage) return;
   const { actorUpdates, itemUpdates, resourceUpdates } = usage;

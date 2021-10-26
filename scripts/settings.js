@@ -1,6 +1,6 @@
 import { debug } from './utils/logger.js';
 
-export const moduleName = 'quick-rolls';
+export const moduleName = 'quick-rolls-forbidden-arcana';
 const curryRegister = (module) => (key, data) => game.settings.register(module, key, data);
 const register = curryRegister(moduleName);
 
