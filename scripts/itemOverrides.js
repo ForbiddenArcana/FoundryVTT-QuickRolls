@@ -368,20 +368,18 @@ async function rollDamage({
 
   // Add damage bonus formula
   const actorBonus = getProperty(actorData, `bonuses.${itemData.actionType}`) || {};
-  if (actorBonus.damage && (parseInt(actorBonus.damage, DEFAULT_RADIX) !== 0)) {
-    parts[0] = `${parts[0]} + ${actorBonus.damage}`;
+  if ( actorBonus.damage && (parseInt(actorBonus.damage) !== 0) ) {
+    parts.push(actorBonus.damage);
   }
 
-  if (this._ammo) {
-    this._ammo.data.data.damage.parts.forEach((p) => {
-      const searchIndex = types.indexOf(p[1]);
-      if (searchIndex !== -1) {
-        parts[searchIndex] = `${parts[searchIndex]} + ${p[0]}`;
-      } else {
-        parts.push(p[0]);
-        types.push(p[1]);
-      }
-    });
+  // Handle ammunition damage
+  const ammoData = this._ammo?.data;
+
+  // Only add the ammunition damage if the ammution is a consumable with type 'ammo'
+  if ( this._ammo && (ammoData.type === "consumable") && (ammoData.data.consumableType === "ammo") ) {
+    parts.push("@ammo");
+    rollData.ammo = ammoData.data.damage.parts.map(p => p[0]).join("+");
+    rollConfig.flavor += ` [${this._ammo.name}]`;
     delete this._ammo;
   }
 
@@ -393,6 +391,12 @@ async function rollDamage({
   // eslint-disable-next-line max-len
   rollFlags.criticalBonusDice = itemData.actionType === 'mwak' || this.actor.getFlag('dnd5e', 'meleeCriticalDamageDice');
   const isCritical = (isNodeCritical($(message.data.content)) || event.altKey) && !event.ctrlKey;
+  
+  // Factor in extra weapon-specific critical damage
+  if ( isCritical && itemData.critical?.damage ) {
+    parts[0] = parts[0] + "+" + itemData.critical.damage;
+  }
+  
   // Create the Roll instance
   const damageRolls = parts.map((p) => rollArbitrary({
     parts: [p], rollData, isCritical, flags: rollFlags,
