@@ -55,7 +55,7 @@ function _getChatCardActor(card) {
  */
 function _onRollSkillCheck(event) {
   event.preventDefault();
-  const { skill } = event.currentTarget.parentElement.dataset;
+  const skill = event.currentTarget.closest("[data-skill]").dataset.skill;
   this.actor.rollSkill(skill, { event });
 }
 
@@ -238,7 +238,7 @@ function buildSkillCheckParts({
 
   // Compose roll parts and data
   const parts = ['@mod'];
-  data.mod = skill.mod + skill.prof;
+  data.mod = skill.mod + skill.prof.flat;
 
   // Ability test bonus
   if (bonuses.check) {
