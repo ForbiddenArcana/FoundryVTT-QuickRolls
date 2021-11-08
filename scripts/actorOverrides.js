@@ -312,9 +312,9 @@ function buildAbilitySaveParts({
   data.mod = abl.mod;
 
   // Include proficiency bonus
-  if (abl.prof > 0) {
+  if (abl.proficient ) {
     parts.push('@prof');
-    data.prof = abl.prof;
+    data.prof = abl.saveProf.flat;
   }
 
   // Include a global actor ability save bonus
