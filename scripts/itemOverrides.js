@@ -379,7 +379,8 @@ async function rollDamage({
   if ( this._ammo && (ammoData.type === "consumable") && (ammoData.data.consumableType === "ammo") ) {
     parts.push("@ammo");
     rollData.ammo = ammoData.data.damage.parts.map(p => p[0]).join("+");
-    rollConfig.flavor += ` [${this._ammo.name}]`;
+    if (rollData.ammo == "") rollData.ammo = 0;
+    //rollConfig.flavor += ` [${this._ammo.name}]`;
     delete this._ammo;
   }
 
